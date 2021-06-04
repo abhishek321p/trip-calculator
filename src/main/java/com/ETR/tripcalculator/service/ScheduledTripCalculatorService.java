@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,17 +30,17 @@ public class ScheduledTripCalculatorService {
      */
     @Scheduled(fixedRate = INTERVAL)
     public void loadTollLineMap() throws IOException {
-        Collection<Location> locations = interchangesService.fetchJson().getLocations().values();
-        if (!locations.isEmpty()) {
-            double distanceFromFirstToll = 0;
-            for (Map.Entry<Integer, Location> entry : interchangesService.fetchJson().getLocations().entrySet()) {
-                if (entry.getKey() == 1) {
-                    tollLineMap.put(entry.getValue().getName(), (double) 0);
-                } else {
-                    if(entry.getValue().getRoutes().get(1).getDistance()>0) {
-                        distanceFromFirstToll += entry.getValue().getRoutes().get(1).getDistance();
-                        tollLineMap.put(entry.getValue().getName(), distanceFromFirstToll);
-                    }
+        double distanceFromFirstToll = 0;
+        for (Map.Entry<Integer, Location> entry : interchangesService.fetchJson().getLocations().entrySet()) {
+            if (entry.getKey() == 1) {
+                // for building the number line we consider first interchange to be at 0.
+                tollLineMap.put(entry.getValue().getName(), (double) 0);
+            } else {
+                // we dont want to consider interchanges that are not built yet, so we skip those with 0 distance.
+                if (entry.getValue().getRoutes().get(1).getDistance() > 0) {
+                    // interchange distance from 0 = distance from previous interchange + distance from 0 to previous interchange.
+                    distanceFromFirstToll += entry.getValue().getRoutes().get(1).getDistance();
+                    tollLineMap.put(entry.getValue().getName(), distanceFromFirstToll);
                 }
             }
         }

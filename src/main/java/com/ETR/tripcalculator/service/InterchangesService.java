@@ -22,9 +22,6 @@ public class InterchangesService {
      */
     public Locations fetchJson() throws IOException {
         File file = ResourceUtils.getFile(path);
-        //File is found
-        System.out.println("File Found : " + file.exists());
-
         ObjectMapper jsonMapper = new ObjectMapper();
         return jsonMapper.readValue(file, new TypeReference<Locations>() {
         });
