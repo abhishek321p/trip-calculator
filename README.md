@@ -8,9 +8,9 @@ to destination summing up the distances in between.
 But, here is the catch, everytime we want to calculate the distance we will be 
 looping through the interchanges which is O(N) costly operation. There is a more 
 simplified and straightforward approach for solving this which can be done in 
-constant time O(1) using the number line, approach is explained below.  
+constant time O(1) using the number line. Approach is explained below.  
 
-**Note**: Since the 407ETR is linear in given problem we are using the number line
+**Note**: Since the 407ETR is linear in given problem, we are using the number line
 approach. If this was network of routes, we would have built a Graph with interchanges
 as nodes and distances as connections.
 
